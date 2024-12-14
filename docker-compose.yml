@@ -1,5 +1,6 @@
 services:
-    laravel.test:
+    laravel-weather-service:
+        container_name: laravel_weather_container
         build:
             context: './vendor/laravel/sail/runtimes/8.4'
             dockerfile: Dockerfile
@@ -20,18 +21,19 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - laravel-weather-network
         depends_on:
-            - redis
-            - mailpit
-    redis:
+            - laravel-weather-redis-service
+            - laravel-weather-mailpit-service
+    laravel-weather-redis-service:
+        container_name: laravel_weather_redis_container
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sail-redis:/data'
+            - 'laravel-weather-redis:/data'
         networks:
-            - sail
+            - laravel-weather-network
         healthcheck:
             test:
                 - CMD
@@ -39,16 +41,17 @@ services:
                 - ping
             retries: 3
             timeout: 5s
-    mailpit:
+    laravel-weather-mailpit-service:
+        container_name: laravel_weather_mailpit_container
         image: 'axllent/mailpit:latest'
         ports:
             - '${FORWARD_MAILPIT_PORT:-1025}:1025'
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
-            - sail
+            - laravel-weather-network
 networks:
-    sail:
+    laravel-weather-network:
         driver: bridge
 volumes:
-    sail-redis:
+    laravel-weather-redis:
         driver: local
