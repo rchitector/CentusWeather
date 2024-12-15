@@ -24,7 +24,7 @@ class OpenWeatherMapApiService
         return null;
     }
 
-    public static function getCitiesGeoByName(string $city)
+    public static function getCitiesGeoByName(string $city): array|null
     {
         $response = self::makeGeoRequest(['q' => $city, 'limit' => 100]);
         if ($response->successful()) {
