@@ -102,6 +102,8 @@
                                 {{ __('Profile') }}
                             </x-dropdown-link>
 
+                            <x-dark-mode-toggle/>
+
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-dropdown-link href="{{ route('api-tokens.index') }}">
                                     {{ __('API Tokens') }}
