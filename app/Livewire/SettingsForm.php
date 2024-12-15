@@ -4,7 +4,10 @@ namespace App\Livewire;
 
 use App\Models\UserSettings;
 use App\Services\OpenWeatherMapApiService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class SettingsForm extends Component
@@ -29,7 +32,7 @@ class SettingsForm extends Component
         'city_lon' => 'nullable|numeric',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         if ($this->settings = Auth::user()->settings) {
             $this->city_name = $this->settings->city_name ?? null;
@@ -40,13 +43,13 @@ class SettingsForm extends Component
         }
     }
 
-    public function openCityModal()
+    public function openCityModal(): void
     {
         $this->isModalOpen = true;
         $this->dispatch('modalOpen');
     }
 
-    public function closeCityModal()
+    public function closeCityModal(): void
     {
         $this->isModalOpen = false;
         $this->search = '';
@@ -54,7 +57,7 @@ class SettingsForm extends Component
         $this->searched = false;
     }
 
-    public function searchCities()
+    public function searchCities(): void
     {
         if (!empty($this->search)) {
             $this->cities = OpenWeatherMapApiService::getCitiesGeoByName($this->search);
@@ -64,7 +67,7 @@ class SettingsForm extends Component
         $this->searched = true;
     }
 
-    public function selectCity($city)
+    public function selectCity($city): void
     {
         $this->city_name = $city['name'];
         $this->city_country = $city['country'] ?? null;
@@ -72,16 +75,14 @@ class SettingsForm extends Component
         $this->city_lat = $city['lat'] ?? null;
         $this->city_lon = $city['lon'] ?? null;
 
-        $this->changed = (
-            $this->city_lat != $this->settings?->city_lat
+        $this->changed = $this->city_lat != $this->settings?->city_lat
             || $this->city_lon != $this->settings?->city_lon
-            || $this->city_name != $this->settings?->city_name
-        );
+            || $this->city_name != $this->settings?->city_name;
 
         $this->closeCityModal();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate();
 
@@ -101,7 +102,7 @@ class SettingsForm extends Component
         session()->flash('message', __('Settings were saved.'));
     }
 
-    public function render()
+    public function render(): Application|Factory|\Illuminate\Contracts\View\View|View
     {
         return view('livewire.settings-form');
     }
