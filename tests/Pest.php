@@ -30,6 +30,12 @@ pest()->extend(Tests\TestCase::class)
 //    return $this->toBe(1);
 //});
 
+expect()->extend('assertSessionHasFlash', function ($key) {
+    return $this->assertSessionHas('_flash', function ($session) use ($key) {
+        return in_array($key, $session['new']);
+    });
+});
+
 /*
 |--------------------------------------------------------------------------
 | Functions

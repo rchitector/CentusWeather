@@ -67,6 +67,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /**
+     * Get UserSettings relation model.
+     *
+     * @return HasOne
+     */
     public function settings(): HasOne
     {
         return $this->hasOne(UserSettings::class);

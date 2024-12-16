@@ -32,6 +32,11 @@ class SettingsForm extends Component
         'city_lon' => 'nullable|numeric',
     ];
 
+    /**
+     * Finding user settings if they exist and saving them to local properties
+     *
+     * @return void
+     */
     public function mount(): void
     {
         if ($this->settings = Auth::user()->settings) {
@@ -43,12 +48,23 @@ class SettingsForm extends Component
         }
     }
 
+    /**
+     * Make city settings modal opened
+     *
+     * @return void
+     */
     public function openCityModal(): void
     {
         $this->isModalOpen = true;
         $this->dispatch('modalOpen');
     }
 
+    /**
+     * Make city settings modal closed
+     * Clear the modal form data to default
+     *
+     * @return void
+     */
     public function closeCityModal(): void
     {
         $this->isModalOpen = false;
@@ -57,6 +73,12 @@ class SettingsForm extends Component
         $this->searched = false;
     }
 
+    /**
+     * Request cities data from the service
+     * Mark "searched" flag as true
+     *
+     * @return void
+     */
     public function searchCities(): void
     {
         if (!empty($this->search)) {
@@ -67,7 +89,18 @@ class SettingsForm extends Component
         $this->searched = true;
     }
 
-    public function selectCity($city): void
+    /**
+     * Save selected in modal form city to local properties
+     *
+     * @param array $city - Expected structure:
+     *                     - 'name' (string): City name (requires).
+     *                     - 'country' (string, optional): Country name.
+     *                     - 'state' (string, optional): State name.
+     *                     - 'lat' (float, optional): Latitude.
+     *                     - 'lon' (float, optional): Longitude.
+     * @return void
+     */
+    public function selectCity(array $city): void
     {
         $this->city_name = $city['name'];
         $this->city_country = $city['country'] ?? null;
@@ -82,6 +115,14 @@ class SettingsForm extends Component
         $this->closeCityModal();
     }
 
+    /**
+     * Update user settings with a new city date.
+     * If settings do not exist, new ones are created.
+     * After saving, the "changed" flag is reset.
+     * Create flash message for user settings page
+     *
+     * @return void
+     */
     public function save(): void
     {
         $this->validate();
@@ -102,6 +143,12 @@ class SettingsForm extends Component
         session()->flash('message', __('Settings were saved.'));
     }
 
+
+    /**
+     * Rendering main settings form template
+     *
+     * @return Application|Factory|\Illuminate\Contracts\View\View|View
+     */
     public function render(): Application|Factory|\Illuminate\Contracts\View\View|View
     {
         return view('livewire.settings-form');

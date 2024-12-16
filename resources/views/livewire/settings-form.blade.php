@@ -44,11 +44,11 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-800 text-end sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-                <button type="submit" @disabled(!$this->changed)
-                class="{{ !$this->changed ? 'text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed' : 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' }}">
-                    {{ __('Save') }}
-                </button>
+            <div class="flex items-center justify-end px-4 pb-5 bg-gray-50 dark:bg-gray-800 text-end sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
+                <button type="submit"
+                        @disabled(!$this->changed)
+                        class="disabled:cursor-not-allowed disabled:bg-gray-400 dark:disabled:bg-gray-700 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >{{ __('Save') }}</button>
             </div>
         </form>
     </div>

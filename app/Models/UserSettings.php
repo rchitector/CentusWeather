@@ -2,13 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserSettings extends Model
 {
+    use HasFactory;
+
     protected $table = 'user_settings';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'user_id',
         'city_name',
@@ -18,12 +26,24 @@ class UserSettings extends Model
         'city_lon',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'city_lat' => 'float',
+            'city_lon' => 'float',
+        ];
+    }
 
-    protected $casts = [
-        'city_lat' => 'float',
-        'city_lon' => 'float',
-    ];
-
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
     protected $appends = [
         'full_location'
     ];
@@ -33,7 +53,14 @@ class UserSettings extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getFullLocationAttribute()
+    /**
+     * Get the city's full location as "City Name (State, Country)".
+     *
+     * Returns only the city name if state or country is unavailable.
+     *
+     * @return string
+     */
+    public function getFullLocationAttribute(): string
     {
         $location = collect([$this->city_country ?? null, $this->city_state ?? null,])->filter()->join(', ');
         if (!empty($location)) {
