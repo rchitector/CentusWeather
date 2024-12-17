@@ -194,7 +194,6 @@ class SettingsForm extends Component
         if (!$city) {
             return;
         }
-
         $cityValidator = Validator::make($city, [
             'name' => [
                 'nullable',
@@ -212,11 +211,9 @@ class SettingsForm extends Component
             'lat' => 'nullable|numeric|between:-90,90',
             'lon' => 'nullable|numeric|between:-180,180',
         ]);
-
         if ($cityValidator->fails()) {
-            throw ValidationException::withMessages($cityValidator->errors()->toArray());
+            return;
         }
-
         $userCity = new UserCity($cityValidator->validated());
         $newCity = $userCity->toArray();
         $newCity['id'] = (string)Str::uuid();

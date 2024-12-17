@@ -47,6 +47,20 @@ it('mounts and initializes settings from the user', function () {
     $component->assertSet('draftCities', $component->get('originalCities'));
 });
 
+it('searches empty city and updates the draft cities array', function () {
+    // Arrange
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    // Act
+    $component = Livewire::test(SettingsForm::class);
+
+    // Act: searches London city
+    $component->set('search', '');
+    $component->call('searchCities');
+    $component->assertSet('foundCities', []);
+});
+
 it('searches cities and updates the draft cities array', function () {
     // Arrange
     $user = User::factory()->create();
@@ -79,6 +93,27 @@ it('searches cities and updates the draft cities array', function () {
 
     // Assert: checks if founded city presents in draft cities array
     expect(SettingsForm::isSameDraftCityExist($component->get('draftCities'), $cityData))->toBeTrue();
+});
+
+it('not found city ID in foundCities', function () {
+    // Arrange
+    $user = User::factory()->create();
+    $this->actingAs($user);
+    $cityData = getLondon();
+    $cityData2 = getLondon();
+
+    // Act
+    $component = Livewire::test(SettingsForm::class);
+
+    // Act: set empty draft cities array
+    $component->set('draftCities', []);
+
+    // Act: add found city
+    $component->set('foundCities', [$cityData]);
+
+    // Assert: check draftCities not changed
+    $component->call('addCity', $cityData2['id']);
+    expect($component->get('draftCities'))->toBe([]);
 });
 
 it('can delete a city from draft cities', function () {

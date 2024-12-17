@@ -41,10 +41,14 @@ class UserSettings extends Model
         ];
     }
 
+    /**
+     * Get User relation.
+     *
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
 
 }
