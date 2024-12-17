@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -68,12 +69,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get UserSettings relation model.
+     * Get UserSettings relation.
      *
      * @return HasOne
      */
     public function settings(): HasOne
     {
         return $this->hasOne(UserSettings::class);
+    }
+
+    /**
+     * Get UserCity relations.
+     *
+     * @return HasMany
+     */
+    public function cities(): HasMany
+    {
+        return $this->hasMany(UserCity::class)->orderByDesc('created_at');
     }
 }

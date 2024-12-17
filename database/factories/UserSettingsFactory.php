@@ -25,11 +25,12 @@ class UserSettingsFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'city_name' => $this->faker->city,
-            'city_country' => $this->faker->country,
-            'city_state' => $this->faker->state,
-            'city_lat' => $this->faker->latitude,
-            'city_lon' => $this->faker->longitude,
+            'rain_enabled' => $this->faker->boolean(),
+            'snow_enabled' => $this->faker->boolean(),
+            'uvi_enabled' => $this->faker->boolean(),
+            'rain_value' => $this->faker->numberBetween(0, 100),
+            'snow_value' => $this->faker->numberBetween(0, 100),
+            'uvi_value' => $this->faker->numberBetween(0, 100),
         ];
     }
 }

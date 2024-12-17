@@ -19,11 +19,12 @@ class UserSettings extends Model
      */
     protected $fillable = [
         'user_id',
-        'city_name',
-        'city_country',
-        'city_state',
-        'city_lat',
-        'city_lon',
+        'rain_enabled',
+        'snow_enabled',
+        'uvi_enabled',
+        'rain_value',
+        'snow_value',
+        'uvi_value',
     ];
 
     /**
@@ -34,39 +35,16 @@ class UserSettings extends Model
     protected function casts(): array
     {
         return [
-            'city_lat' => 'float',
-            'city_lon' => 'float',
+            'rain_enabled' => 'boolean',
+            'snow_enabled' => 'boolean',
+            'uvi_enabled' => 'boolean',
         ];
     }
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'full_location'
-    ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the city's full location as "City Name (State, Country)".
-     *
-     * Returns only the city name if state or country is unavailable.
-     *
-     * @return string
-     */
-    public function getFullLocationAttribute(): string
-    {
-        $location = collect([$this->city_country ?? null, $this->city_state ?? null,])->filter()->join(', ');
-        if (!empty($location)) {
-            return $this->city_name . " ($location)";
-        }
-        return $this->city_name;
-    }
 
 }
