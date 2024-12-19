@@ -15,13 +15,13 @@ return new class extends Migration
         Schema::create('user_cities', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->char('name')->nullable();
+            $table->char('name');
             $table->char('country')->nullable();
             $table->char('state')->nullable();
-            $table->char('lat')->nullable();
-            $table->char('lon')->nullable();
+            $table->float('lat')->nullable();
+            $table->float('lon')->nullable();
             $table->timestamps();
-            $table->unique(['name', 'country', 'state', 'lat', 'lon']);
+            $table->unique(['user_id', 'name', 'country', 'state', 'lat', 'lon']);
         });
     }
 

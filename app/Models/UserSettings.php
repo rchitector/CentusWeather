@@ -38,6 +38,9 @@ class UserSettings extends Model
             'rain_enabled' => 'boolean',
             'snow_enabled' => 'boolean',
             'uvi_enabled' => 'boolean',
+            'rain_value' => 'integer',
+            'snow_value' => 'integer',
+            'uvi_value' => 'integer',
         ];
     }
 

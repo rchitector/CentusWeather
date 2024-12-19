@@ -36,6 +36,8 @@ class UserCity extends Model
         return [
             'lat' => 'float',
             'lon' => 'float',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
