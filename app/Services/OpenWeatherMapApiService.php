@@ -42,9 +42,12 @@ class OpenWeatherMapApiService
                     ->orWhere('snow_enabled', true)
                     ->orWhere('uvi_enabled', true);
             })
+            ->get()
             ->each(function ($userCity) {
-                $weatherResponse = self::getWeatherResponse($userCity->lat, $userCity->lon, 'minutely,daily,alerts');
-                Log::debug($userCity->name.': '.$userCity->lon.':'.$userCity->lat.': '.count($weatherResponse->json()['hourly']));
+                $weatherResponse = self::getWeatherResponse($userCity->lat, $userCity->lon, 'current,minutely,daily,alerts');
+                foreach ($weatherResponse->json()['hourly'] as $hourly) {
+                    HourlyWeather::saveWeather($hourly, $userCity);
+                }
             });
     }
 
