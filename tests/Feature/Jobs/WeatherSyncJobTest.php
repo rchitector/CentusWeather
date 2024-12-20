@@ -14,5 +14,3 @@ test('OpenWeatherMapApiService::checkUpdates method', function () {
     $openWeatherMapApiService->shouldReceive('checkUpdates')->once();
     $openWeatherMapApiService->checkUpdates();
 });
-
-

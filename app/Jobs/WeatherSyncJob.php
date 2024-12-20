@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Services\MailingService;
 use App\Services\OpenWeatherMapApiService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -24,5 +25,6 @@ class WeatherSyncJob implements ShouldQueue
     public function handle(): void
     {
         OpenWeatherMapApiService::checkUpdates();
+        OpenWeatherMapApiService::checkWeatherLimits(new MailingService);
     }
 }

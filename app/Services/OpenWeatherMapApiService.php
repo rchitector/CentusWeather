@@ -77,20 +77,20 @@ class OpenWeatherMapApiService
                     }
                 }
             });
-
-        self::checkWeatherLimits();
     }
 
-    public static function checkWeatherLimits(): void
+    public static function checkWeatherLimits(MailingServiceInterface $mailingService): void
     {
         UserSettings::query()
             ->where('rain_enabled', true)
             ->orWhere('snow_enabled', true)
             ->orWhere('uvi_enabled', true)
             ->get()
-            ->each(function ($settings) {
+            ->each(function ($settings) use ($mailingService) {
                 $cities = $settings->user->cities()->withUpcomingWeatherData($settings)->get();
-                MailingService::sendWeatherAlert($settings->user, $cities);
+                if ($cities->isNotEmpty()) {
+                    $mailingService->sendWeatherAlert($settings->user, $cities);
+                }
             });
     }
 }
