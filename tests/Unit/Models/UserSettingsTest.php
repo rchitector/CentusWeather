@@ -17,6 +17,7 @@ test('to array', function () {
         'rain_value',
         'snow_value',
         'uvi_value',
+        'start_notification_at',
     ]);
 });
 

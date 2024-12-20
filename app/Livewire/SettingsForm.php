@@ -130,6 +130,7 @@ class SettingsForm extends Component
             'rain_value' => 0,
             'snow_value' => 0,
             'uvi_value' => 0,
+            'start_notification_at' => Carbon::now(),
         ];
         $this->draftSettings = $this->originalSettings;
     }
