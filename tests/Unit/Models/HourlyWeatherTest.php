@@ -32,7 +32,7 @@ test('to array', function () {
 test('casts', function () {
     $weatherHourly = HourlyWeather::factory()->create()->fresh();
 
-    expect($weatherHourly->dt)->toBeInstanceOf(DateTime::class)
+    expect($weatherHourly->dt)->toBeInt()
         ->and($weatherHourly->temp)->toBeFloat()
         ->and($weatherHourly->feels_like)->toBeFloat()
         ->and($weatherHourly->pressure)->toBeInt()
@@ -104,4 +104,3 @@ it('updates existing entry for the same user_city_id and dt', function () {
     expect(HourlyWeather::count())->toBe(1)
         ->and(HourlyWeather::first()->temp)->toBe(123.45);
 });
-

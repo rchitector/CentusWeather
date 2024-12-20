@@ -15,9 +15,9 @@ return new class extends Migration
             $table->boolean('rain_enabled')->default(false);
             $table->boolean('snow_enabled')->default(false);
             $table->boolean('uvi_enabled')->default(false);
-            $table->integer('rain_value')->default(0);
-            $table->integer('snow_value')->default(0);
-            $table->integer('uvi_value')->default(0);
+            $table->float('rain_value')->default(0);
+            $table->float('snow_value')->default(0);
+            $table->float('uvi_value')->default(0);
 
             $table->dropColumn('city_name');
             $table->dropColumn('city_country');

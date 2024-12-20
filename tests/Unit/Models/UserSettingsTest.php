@@ -26,9 +26,9 @@ test('casts', function () {
     expect($userSettings->rain_enabled)->toBeBool()
         ->and($userSettings->snow_enabled)->toBeBool()
         ->and($userSettings->uvi_enabled)->toBeBool()
-        ->and($userSettings->rain_value)->toBeInt()
-        ->and($userSettings->snow_value)->toBeInt()
-        ->and($userSettings->uvi_value)->toBeInt();
+        ->and($userSettings->rain_value)->toBeFloat()
+        ->and($userSettings->snow_value)->toBeFloat()
+        ->and($userSettings->uvi_value)->toBeFloat();
 });
 
 test('user relation', function () {
