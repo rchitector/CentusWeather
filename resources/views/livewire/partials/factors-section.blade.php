@@ -32,10 +32,10 @@
                     class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Enabled</span>
             </label>
-            <label for="rain" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Rain: <span
+            <label for="rain" class="block font-medium text-sm text-gray-700 dark:text-gray-300">{{__('Rain')}}: <span
                     id="rain-value">{{ $draftSettings['rain_value'] }} mm</span></label>
             <input {{ $draftSettings['rain_enabled'] ? '' : 'disabled' }} type="range" id="rain" wire:model.change="draftSettings.rain_value"
-                   min="{{$rainRanges[0]['min']}}" max="{{end($rainRanges)['max']}}" step="1"
+                   min="{{$rainRanges[0]['min']}}" max="{{end($rainRanges)['max']}}" step="0.1"
                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
             <div
                 class="mt-2 relative mb-6 w-full flex justify-between font-medium text-sm text-gray-700 dark:text-gray-300">
@@ -61,10 +61,10 @@
                     class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Enabled</span>
             </label>
-            <label for="snow" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Snow: <span
+            <label for="snow" class="block font-medium text-sm text-gray-700 dark:text-gray-300">{{__('Snow')}}: <span
                     id="snow-value">{{ $draftSettings['snow_value'] }} mm/h</span></label>
             <input {{ $draftSettings['snow_enabled'] ? '' : 'disabled' }} type="range" id="snow" wire:model.change="draftSettings.snow_value"
-                   min="{{$snowRanges[0]['min']}}" max="{{end($snowRanges)['max']}}" step="1"
+                   min="{{$snowRanges[0]['min']}}" max="{{end($snowRanges)['max']}}" step="0.1"
                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
             <div
                 class="mt-2 relative mb-6 w-full flex justify-between font-medium text-sm text-gray-700 dark:text-gray-300">
@@ -90,10 +90,10 @@
                     class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Enabled</span>
             </label>
-            <label for="uvi" class="block font-medium text-sm text-gray-700 dark:text-gray-300">UV Index: <span
+            <label for="uvi" class="block font-medium text-sm text-gray-700 dark:text-gray-300">{{__('UV Index')}}: <span
                     id="uvi-value">{{ $draftSettings['uvi_value'] }}</span></label>
             <input {{ $draftSettings['uvi_enabled'] ? '' : 'disabled' }} type="range" id="uvi" wire:model.change="draftSettings.uvi_value"
-                   min="{{$uviRanges[0]['min']}}" max="{{end($uviRanges)['max']}}" step="1"
+                   min="{{$uviRanges[0]['min']}}" max="{{end($uviRanges)['max']}}" step="0.1"
                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
             <div
                 class="mt-2 relative mb-6 w-full flex justify-between font-medium text-sm text-gray-700 dark:text-gray-300">
