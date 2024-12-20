@@ -63,9 +63,12 @@ class OpenWeatherMapApiService
     {
         UserCity::query()
             ->whereHas('user.settings', function ($query) {
-                $query->where('rain_enabled', true)
-                    ->orWhere('snow_enabled', true)
-                    ->orWhere('uvi_enabled', true);
+                $query->where('start_notification_at', '<=', now())
+                    ->where(function ($query) {
+                        $query->where('rain_enabled', true)
+                            ->orWhere('snow_enabled', true)
+                            ->orWhere('uvi_enabled', true);
+                    });
             })
             ->get()
             ->each(function ($userCity) {
@@ -82,9 +85,12 @@ class OpenWeatherMapApiService
     public static function checkWeatherLimits(MailingServiceInterface $mailingService): void
     {
         UserSettings::query()
-            ->where('rain_enabled', true)
-            ->orWhere('snow_enabled', true)
-            ->orWhere('uvi_enabled', true)
+            ->where('start_notification_at', '<=', now())
+            ->where(function ($query) {
+                $query->where('rain_enabled', true)
+                    ->orWhere('snow_enabled', true)
+                    ->orWhere('uvi_enabled', true);
+            })
             ->get()
             ->each(function ($settings) use ($mailingService) {
                 $cities = $settings->user->cities()->withUpcomingWeatherData($settings)->get();

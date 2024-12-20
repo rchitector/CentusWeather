@@ -25,6 +25,7 @@ class UserSettings extends Model
         'rain_value',
         'snow_value',
         'uvi_value',
+        'start_notification_at',
     ];
 
     /**
@@ -41,6 +42,7 @@ class UserSettings extends Model
             'rain_value' => 'float',
             'snow_value' => 'float',
             'uvi_value' => 'float',
+            'start_notification_at' => 'datetime',
         ];
     }
 

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -90,6 +89,8 @@ class SettingsForm extends Component
      * @var array
      */
     public array $uviRanges = [];
+
+    public int $pause = 0;
 
     /**
      * Initialises all static data
@@ -280,7 +281,7 @@ class SettingsForm extends Component
     public function checkSettingsChanges(): void
     {
         $this->isSettingsFormChanged = false;
-        $fields = ['rain_enabled', 'snow_enabled', 'uvi_enabled', 'rain_value', 'snow_value', 'uvi_value'];
+        $fields = ['start_notification_at', 'rain_enabled', 'snow_enabled', 'uvi_enabled', 'rain_value', 'snow_value', 'uvi_value'];
         foreach ($fields as $field) {
             if (($this->originalSettings[$field] ?? null) != ($this->draftSettings[$field] ?? null)) {
                 $this->isSettingsFormChanged = true;
@@ -310,6 +311,7 @@ class SettingsForm extends Component
     public function resetSettingsForm(): void
     {
         $this->draftSettings = $this->originalSettings;
+        $this->pause = 0;
 
         $this->checkSettingsChanges();
 
@@ -364,7 +366,7 @@ class SettingsForm extends Component
      */
     public function updated($field): void
     {
-        $settingsFields = ['draftSettings.rain_enabled', 'draftSettings.snow_enabled', 'draftSettings.uvi_enabled', 'draftSettings.rain_value', 'draftSettings.snow_value', 'draftSettings.uvi_value'];
+        $settingsFields = ['draftSettings.start_notification_at', 'draftSettings.rain_enabled', 'draftSettings.snow_enabled', 'draftSettings.uvi_enabled', 'draftSettings.rain_value', 'draftSettings.snow_value', 'draftSettings.uvi_value'];
         if (in_array($field, $settingsFields, true)) {
             $this->checkSettingsChanges();
         }
@@ -408,6 +410,30 @@ class SettingsForm extends Component
             }
         }
         return null;
+    }
+
+    public function applyNotificationPause(): void
+    {
+        $this->draftSettings['start_notification_at'] = Carbon::now()->addHours($this->pause);
+        $this->checkSettingsChanges();
+    }
+
+    public function incrementPause(): void
+    {
+        $this->pause++;
+    }
+
+    public function decrementPause(): void
+    {
+        if ($this->pause > 0) {
+            $this->pause--;
+        }
+    }
+
+    public function getNextNotificationDateTime(): string | null
+    {
+        $date = Carbon::parse($this->draftSettings['start_notification_at']);
+        return $date > now() ? $date->diffForHumans(['parts' => 2]) : null;
     }
 
     /**
