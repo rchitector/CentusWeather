@@ -88,7 +88,7 @@ class OpenWeatherMapApiService
             ->get()
             ->each(function ($settings) use ($mailingService) {
                 $cities = $settings->user->cities()->withUpcomingWeatherData($settings)->get();
-                if ($cities->isNotEmpty()) {
+                if ($cities->filter(fn($city) => $city->weather->isNotEmpty())->isNotEmpty()) {
                     $mailingService->sendWeatherAlert($settings->user, $cities);
                 }
             });

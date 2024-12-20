@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'number_of_visible_next_hours' => 2,
+    'number_of_visible_next_hours' => 2 * 24,
 
 
     'snow_ranges' => [
