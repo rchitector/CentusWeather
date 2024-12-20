@@ -54,4 +54,14 @@ class UserSettings extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopeEnabledSettings($query)
+    {
+        return $query->whereHas('settings', function ($query) {
+            $query->where('rain_enabled', true)
+                ->orWhere('snow_enabled', true)
+                ->orWhere('uvi_enabled', true);
+        });
+    }
+
+
 }

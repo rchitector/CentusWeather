@@ -18,4 +18,8 @@ Route::middleware([
     Route::get('/settings', function () {
         return view('settings');
     })->name('settings');
+
+    Route::get('/weather', function () {
+        return view('weather');
+    })->name('weather');
 });

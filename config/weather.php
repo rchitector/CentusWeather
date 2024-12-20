@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'number_of_visible_next_hours' => 2,
+
+
     'snow_ranges' => [
         [
             'min' => 0,

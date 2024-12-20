@@ -8,7 +8,10 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-Schedule::job(new WeatherSyncJob())->description('Job: Check weather updates')->hourly();
+Schedule::job(new WeatherSyncJob())
+    ->name('weather_sync')
+    ->description('Job: Check weather updates')
+    ->hourly();
 
 Artisan::command('weather', function () {
     dispatch(new WeatherSyncJob());
