@@ -6,6 +6,7 @@ use App\Models\HourlyWeather;
 use App\Models\UserCity;
 use App\Models\UserSettings;
 use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -61,42 +62,39 @@ class OpenWeatherMapApiService
 
     public static function checkUpdates(): void
     {
-        UserCity::query()
-            ->whereHas('user.settings', function ($query) {
-                $query->where('start_notification_at', '<=', now())
-                    ->where(function ($query) {
-                        $query->where('rain_enabled', true)
-                            ->orWhere('snow_enabled', true)
-                            ->orWhere('uvi_enabled', true);
-                    });
-            })
-            ->get()
-            ->each(function ($userCity) {
-                $weatherData = self::getWeatherResponse($userCity->lat, $userCity->lon)->json();
-                if (isset($weatherData['hourly'])) {
-                    Log::debug($userCity->name . ': ' . $userCity->lon . ':' . $userCity->lat . ': ' . count($weatherData['hourly']));
-                    foreach ($weatherData['hourly'] as $hourly) {
-                        HourlyWeather::saveWeather($hourly, $userCity);
-                    }
+        self::getCitiesForNotification()->each(function ($userCity) {
+            $weatherData = self::getWeatherResponse($userCity->lat, $userCity->lon)->json();
+            if (isset($weatherData['hourly'])) {
+                foreach ($weatherData['hourly'] as $hourly) {
+                    HourlyWeather::saveWeather($hourly, $userCity);
                 }
-            });
+            }
+        });
+    }
+
+    public static function getCitiesForNotification(): array|Collection
+    {
+        return UserCity::query()
+            ->whereHas('user.settings', function ($query) {
+                $query->withActiveNotifications();
+            })
+            ->get();
+    }
+
+    public static function getSettingsForNotification(): array|Collection
+    {
+        return UserSettings::query()
+            ->withActiveNotifications()
+            ->get();
     }
 
     public static function checkWeatherLimits(MailingServiceInterface $mailingService): void
     {
-        UserSettings::query()
-            ->where('start_notification_at', '<=', now())
-            ->where(function ($query) {
-                $query->where('rain_enabled', true)
-                    ->orWhere('snow_enabled', true)
-                    ->orWhere('uvi_enabled', true);
-            })
-            ->get()
-            ->each(function ($settings) use ($mailingService) {
-                $cities = $settings->user->cities()->withUpcomingWeatherData($settings)->get();
-                if ($cities->filter(fn($city) => $city->weather->isNotEmpty())->isNotEmpty()) {
-                    $mailingService->sendWeatherAlert($settings->user, $cities);
-                }
-            });
+        self::getSettingsForNotification()->each(function ($settings) use ($mailingService) {
+            $cities = $settings->user->cities()->withUpcomingWeatherData($settings)->get();
+            if ($cities->filter(fn($city) => $city->weather->isNotEmpty())->isNotEmpty()) {
+                $mailingService->sendWeatherAlert($settings->user, $cities);
+            }
+        });
     }
 }

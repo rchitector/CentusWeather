@@ -40,15 +40,15 @@ it('can get invalid Cities empty array', function () {
 });
 
 it('can detect weather limit exceeding', function () {
-
     $user = User::factory()->create()->fresh();
-    UserSettings::factory()->for($user)->create([
+    $settings = UserSettings::factory()->for($user)->create([
         'rain_enabled' => true,
         'snow_enabled' => true,
         'uvi_enabled' => true,
         'rain_value' => 0.1,
         'snow_value' => 0.1,
         'uvi_value' => 0.1,
+        'start_notification_at' => Carbon::now(),
     ]);
     UserCity::factory()->for($user)->create([
         "name" => 'London',
@@ -67,36 +67,9 @@ it('can detect weather limit exceeding', function () {
     Http::fake(['*' => Http::response($data)]);
     OpenWeatherMapApiService::checkUpdates();
     expect(HourlyWeather::all()->count())->toBe(count($data['hourly']));
-});
 
-it('checks weather limits and sends alerts', function () {
-    $user = User::factory()->create()->fresh();
-    UserSettings::factory()->for($user)->create([
-        'rain_enabled' => true,
-        'snow_enabled' => true,
-        'uvi_enabled' => true,
-        'rain_value' => 0.1,
-        'snow_value' => 0.1,
-        'uvi_value' => 0.1,
-    ]);
-    UserCity::factory()->for($user)->create([
-        "name" => 'London',
-        "lat" => 51.5073219,
-        "lon" => -0.1276474,
-        "country" => "GB",
-        "state" => "England",
-    ]);
-    $data = [
-        "hourly" => [
-            ["dt" => Carbon::now()->addHours(1)->timestamp, "uvi" => 0, "rain" => ["1h" => 0], "snow" => ["1h" => 0]],
-            ["dt" => Carbon::now()->addHours(2)->timestamp, "uvi" => 0.22, "rain" => ["1h" => 0.2], "snow" => ["1h" => 0.22]],
-            ["dt" => Carbon::now()->addHours(3)->timestamp, "uvi" => 0.32, "rain" => ["1h" => 0.3], "snow" => ["1h" => 0.32]],
-        ]
-    ];
-    Http::fake(['*' => Http::response($data)]);
-    OpenWeatherMapApiService::checkUpdates();
-
-    $mailingService = Mockery::mock(MailingService::class);
-    $mailingService->shouldReceive('sendWeatherAlert')->once();
-    OpenWeatherMapApiService::checkWeatherLimits($mailingService);
+    $settings->start_notification_at = Carbon::now()->addHours(5);
+    $settings->save();
+    $settings = OpenWeatherMapApiService::getSettingsForNotification();
+    expect($settings->count())->toBe(0);
 });

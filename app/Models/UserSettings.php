@@ -65,5 +65,15 @@ class UserSettings extends Model
         });
     }
 
+    public function scopeWithActiveNotifications($query)
+    {
+        return $query->where('start_notification_at', '<=', now())
+            ->where(function ($query) {
+                $query->where('rain_enabled', true)
+                    ->orWhere('snow_enabled', true)
+                    ->orWhere('uvi_enabled', true);
+            });
+    }
+
 
 }
