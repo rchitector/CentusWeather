@@ -8,30 +8,30 @@ The steps for initial installation and launch of a local server are described be
 
 ### Cloning project
 ```bash
-  git clone https://github.com/rchitector/CentusWeather.git
+git clone https://github.com/rchitector/CentusWeather.git
 ```
 
 ```bash
-  cd ./CentusWeather/
+cd ./CentusWeather/
 ```
 
 ### Installing relations
 ```bash
-  ./install.sh
+./install.sh
 ```
 
 ### Starting services
 ```bash
-  ./start.sh
+./start.sh
 ```
 
 ### Main dashboard
-```
+```bash
 http://localhost
 ```
 
 ### Mailbox dashboard
-```
+```bash
 http://localhost:8025
 ```
 
