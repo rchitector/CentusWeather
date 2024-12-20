@@ -13,3 +13,4 @@ cp ./.env.example ./.env
 ./vendor/bin/sail npm install
 ./vendor/bin/sail npm run build
 ./vendor/bin/sail artisan migrate --force
+touch ./storage/logs/laravel.log
